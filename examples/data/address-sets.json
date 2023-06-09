@@ -1,0 +1,22 @@
+[
+  {
+    "group": "batch1",
+    "title": "AJAX Set #1 (with default value)",
+    "defaults": {
+      "province": "1",
+      "district": "1",
+      "subdistrict": "1",
+      "postalcode": "1"
+    }
+  },
+  {
+    "group": "batch2",
+    "title": "AJAX Set #2 (empty start)",
+    "defaults": {
+      "province": "",
+      "district": "",
+      "subdistrict": "",
+      "postalcode": ""
+    }
+  }
+]

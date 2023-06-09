@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WPATA Example - Basic Multi Set</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .address-set { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+    .address-set h2 { margin-top: 0; font-size: 18px; }
+    .row { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 12px; }
+    label { display: block; font-size: 13px; margin-bottom: 6px; }
+    select { width: 100%; min-height: 36px; }
+    @media (max-width: 700px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Example: Multi Set in One Page</h1>
+  <p>ตัวอย่างนี้แสดงฟอร์ม 2 ชุดในหน้าเดียว โดยแยก group ให้แต่ละชุดชัดเจน</p>
+
+  <div class="address-set wpata-group-shipping">
+    <h2>Shipping Address</h2>
+    <div class="row">
+      <div>
+        <label>Province</label>
+        <select class="wpata-select-province"></select>
+      </div>
+      <div>
+        <label>District</label>
+        <select class="wpata-select-district"></select>
+      </div>
+      <div>
+        <label>Subdistrict</label>
+        <select class="wpata-select-subdistrict"></select>
+      </div>
+      <div>
+        <label>Postal code</label>
+        <select class="wpata-select-postalcode"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="address-set wpata-group-billing">
+    <h2>Billing Address</h2>
+    <div class="row">
+      <div>
+        <label>Province</label>
+        <select class="wpata-select-province"></select>
+      </div>
+      <div>
+        <label>District</label>
+        <select class="wpata-select-district"></select>
+      </div>
+      <div>
+        <label>Subdistrict</label>
+        <select class="wpata-select-subdistrict"></select>
+      </div>
+      <div>
+        <label>Postal code</label>
+        <select class="wpata-select-postalcode"></select>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Optional only when your AJAX endpoint is custom:
+    // window.wpataConfig = { ajaxUrl: "/custom-path/admin-ajax.php" };
+  </script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script src="/wp-content/plugins/wp-thailand-address-autocomplete/assets/wpata.js"></script>
+</body>
+</html>

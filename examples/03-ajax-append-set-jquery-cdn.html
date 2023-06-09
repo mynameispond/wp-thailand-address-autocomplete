@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WPATA Example - AJAX Append + wpataInit Context</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .help-box {
+      border: 1px solid #dbe7f5;
+      border-left: 4px solid #2271b1;
+      border-radius: 8px;
+      background: #f5f9ff;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .help-box h2 { margin: 0 0 8px; font-size: 18px; }
+    .help-box ul { margin: 0 0 0 18px; padding: 0; }
+    .help-box li { margin: 4px 0; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    button { padding: 8px 14px; cursor: pointer; }
+    .set { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+    .set h3 { margin: 0 0 12px; font-size: 16px; }
+    .row { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 12px; }
+    label { display: block; font-size: 13px; margin-bottom: 6px; }
+    select { width: 100%; min-height: 36px; }
+    #status { margin-bottom: 12px; color: #374151; font-size: 14px; }
+    @media (max-width: 700px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Example: Add Address Sets via AJAX + jQuery CDN</h1>
+
+  <div class="help-box">
+    <h2>How to use <code>window.wpataInit(context)</code></h2>
+    <ul>
+      <li><code>window.wpataInit()</code> or <code>window.wpataInit(document)</code> = init ทั้งหน้า</li>
+      <li><code>window.wpataInit('#sets-container')</code> = ส่งเป็น selector แบบ id</li>
+      <li><code>window.wpataInit('.set')</code> = ส่งเป็น selector แบบ class</li>
+      <li><code>window.wpataInit(document.getElementById('sets-container'))</code> = ส่งเป็น DOM element</li>
+      <li><code>window.wpataInit($nodes)</code> = ส่งเป็น jQuery object (แนะนำที่สุดหลัง append)</li>
+      <li>ไม่แนะนำให้ส่ง HTML string ตรงๆ เช่น <code>window.wpataInit('&lt;div&gt;...')</code></li>
+      <li><code>window.wpataConfig.ajaxUrl</code> มีค่า default อัตโนมัติอยู่แล้ว (ตั้งเองเฉพาะตอนอยาก override endpoint)</li>
+      <li>กรณี append ทีละชุดแล้ว init ทันที: ไม่ใส่ <code>wpata-group-*</code> ก็ได้</li>
+      <li>กรณี append หลายชุดพร้อมกันในครั้งเดียว: ควรใส่ <code>wpata-group-*</code></li>
+    </ul>
+  </div>
+
+  <div class="toolbar">
+    <button id="load-by-ajax" type="button">1) Load sets via AJAX</button>
+    <button id="append-one-empty" type="button">2) Append empty set</button>
+    <button id="append-one-no-group-init-container" type="button">3) Append 1 set (no group) + init #sets-container</button>
+    <button id="init-by-id" type="button">Init by #sets-container</button>
+    <button id="init-by-class" type="button">Init by .set</button>
+  </div>
+
+  <div id="status">Ready</div>
+  <div id="sets-container"></div>
+
+  <script id="address-set-template" type="text/template">
+    <div class="set __GROUP_CLASS__">
+      <h3>__TITLE__</h3>
+      <div class="row">
+        <div>
+          <label>Province</label>
+          <select class="wpata-select-province" data-wpata-value="__PV__"></select>
+        </div>
+        <div>
+          <label>District</label>
+          <select class="wpata-select-district" data-wpata-value="__DT__"></select>
+        </div>
+        <div>
+          <label>Subdistrict</label>
+          <select class="wpata-select-subdistrict" data-wpata-value="__SDT__"></select>
+        </div>
+        <div>
+          <label>Postal code</label>
+          <select class="wpata-select-postalcode" data-wpata-value="__PTC__"></select>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script>
+    // Optional only when your AJAX endpoint is custom:
+    // window.wpataConfig = { ajaxUrl: "/custom-path/admin-ajax.php" };
+  </script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script src="/wp-content/plugins/wp-thailand-address-autocomplete/assets/wpata.js"></script>
+  <script>
+    (function ($) {
+      "use strict";
+
+      var localCounter = 0;
+      var template = $("#address-set-template").html();
+
+      function asText(value) {
+        if (value === undefined || value === null) {
+          return "";
+        }
+        return String(value);
+      }
+
+      function renderSet(item) {
+        localCounter += 1;
+        var groupName = "wpata-group-ajax-" + asText(item.group || localCounter);
+        var defaults = item.defaults || {};
+        var useGroup = item.useGroup !== false;
+        var groupClass = useGroup ? groupName : "";
+
+        return template
+          .replace(/__GROUP_CLASS__/g, groupClass)
+          .replace(/__TITLE__/g, asText(item.title || ("Address Set " + localCounter)))
+          .replace(/__PV__/g, asText(defaults.province))
+          .replace(/__DT__/g, asText(defaults.district))
+          .replace(/__SDT__/g, asText(defaults.subdistrict))
+          .replace(/__PTC__/g, asText(defaults.postalcode));
+      }
+
+      function initWithContext(context, label) {
+        window.wpataInit(context);
+        $("#status").text("Initialized with " + label);
+      }
+
+      function appendSets(items) {
+        if (!Array.isArray(items) || items.length === 0) {
+          $("#status").text("No data returned");
+          return;
+        }
+
+        var html = "";
+        items.forEach(function (item) {
+          html += renderSet(item);
+        });
+
+        var $nodes = $(html);
+        $("#sets-container").append($nodes);
+
+        // Recommended for AJAX append:
+        // init only newly appended nodes, not the whole document.
+        initWithContext($nodes, "$nodes (jQuery object)");
+      }
+
+      $("#load-by-ajax").on("click", function () {
+        $("#status").text("Loading via AJAX...");
+
+        $.getJSON("./data/address-sets.json")
+          .done(function (response) {
+            appendSets(response);
+          })
+          .fail(function (xhr, status) {
+            $("#status").text("AJAX failed: " + status);
+          });
+      });
+
+      $("#append-one-empty").on("click", function () {
+        appendSets([{ title: "Manual Empty Set", defaults: {} }]);
+      });
+
+      $("#append-one-no-group-init-container").on("click", function () {
+        var html = renderSet({
+          title: "Single Append (No Group)",
+          defaults: {},
+          useGroup: false
+        });
+        $("#sets-container").append(html);
+        initWithContext("#sets-container", "#sets-container (single append, no group)");
+      });
+
+      $("#init-by-id").on("click", function () {
+        initWithContext("#sets-container", "#sets-container");
+      });
+
+      $("#init-by-class").on("click", function () {
+        initWithContext(".set", ".set");
+      });
+    })(jQuery);
+  </script>
+</body>
+</html>
