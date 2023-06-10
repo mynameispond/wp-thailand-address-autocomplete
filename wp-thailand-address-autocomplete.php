@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Autocomplete Thailand Address
-Plugin URI: https://github.com/mynameispond/wp-table-postmeta-custom
+Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
 Version: 0.0.1
 Author: mynameispond
