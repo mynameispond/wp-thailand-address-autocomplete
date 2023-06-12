@@ -11,10 +11,6 @@ Author URI: https://github.com/mynameispond
 define('WPATA_VERSION', '0.0.1');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 function wpata_meta_tags()
 {
     echo '<meta name="wpata-admin-url" content="' . admin_url('/') . '">';
