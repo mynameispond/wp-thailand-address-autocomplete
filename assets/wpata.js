@@ -17,7 +17,7 @@ function wpata_setup($) {
         let str2 = '';
         arr_lang.forEach((str) => {
             if (str.includes("wpata-lang-")) {
-                if (str != '' && str != null && str != undefined) {
+                if (str != undefined && str != '' && str != null) {
                     str2 = str;
                 }
             }
@@ -27,8 +27,8 @@ function wpata_setup($) {
             lang = str2.replace(regex, '');
         }
     } else {
-        if (html_lang != '' && html_lang != null && html_lang != undefined) {
-            const html_lang = $('html').attr('lang');
+        const html_lang = $('html').attr('lang');
+        if (html_lang != undefined && html_lang != '' && html_lang != null) {
             lang = html_lang.slice(0, 2);
         }
     }
