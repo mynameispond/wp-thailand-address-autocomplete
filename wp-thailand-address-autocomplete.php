@@ -139,7 +139,7 @@ register_activation_hook(__FILE__, 'wpata_plugin_activate');
 function wpata_enqueue_scripts()
 {
 	$dir = WP_PLUGIN_URL . '/' . WPATA_SLUG . '/assets/';
-	wp_enqueue_script('wpata-js', $dir . 'wpata.js', array(), WPATA_VERSION, true);
+	wp_enqueue_script('wpata-js', $dir . 'wpata.js', array('jquery'), WPATA_VERSION, true);
 }
 add_action('admin_enqueue_scripts', 'wpata_enqueue_scripts');
 add_action('wp_enqueue_scripts', 'wpata_enqueue_scripts');
