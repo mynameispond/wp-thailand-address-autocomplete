@@ -120,7 +120,7 @@ function wpata_setup($) {
 			const postalcode_group_selector = postalcode_selector.replace(".wpata-select", '.wpata-group-' + group_ii + '.wpata-select');
 
 			const province_value = $(province_group_selector).val();
-			$(province_group_selector).prop('disabled', true).html(loading_option);
+			$(province_group_selector).prop('disabled', true);
 			$.ajax({
 				url: wpata_admin_url + 'admin-ajax.php',
 				type: 'GET',
@@ -137,7 +137,7 @@ function wpata_setup($) {
 			if (province_value == '' || province_value == null) {
 			} else {
 				const district_value = $(district_group_selector).val();
-				$(district_group_selector).prop('disabled', true).html(loading_option);
+				$(district_group_selector).prop('disabled', true);
 				$.ajax({
 					url: wpata_admin_url + 'admin-ajax.php',
 					type: 'GET',
@@ -155,7 +155,7 @@ function wpata_setup($) {
 				if (district_value == '' || district_value == null) {
 				} else {
 					const subdistrict_value = $(subdistrict_group_selector).val();
-					$(subdistrict_group_selector).prop('disabled', true).html(loading_option);
+					$(subdistrict_group_selector).prop('disabled', true);
 					$.ajax({
 						url: wpata_admin_url + 'admin-ajax.php',
 						type: 'GET',
@@ -173,7 +173,7 @@ function wpata_setup($) {
 					if (subdistrict_value == '' || subdistrict_value == null) {
 					} else {
 						const postalcode_value = $(postalcode_group_selector).val();
-						$(postalcode_group_selector).prop('disabled', true).html(loading_option);
+						$(postalcode_group_selector).prop('disabled', true);
 						$.ajax({
 							url: wpata_admin_url + 'admin-ajax.php',
 							type: 'GET',
