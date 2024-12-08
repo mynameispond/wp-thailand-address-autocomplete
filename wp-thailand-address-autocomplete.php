@@ -8,7 +8,7 @@ Author: mynameispond
 Author URI: https://github.com/mynameispond
 */
 
-define('WPATA_VERSION', '0.1.0');
+define('WPATA_VERSION', '0.2.0');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 
 function wpata_meta_tags()
