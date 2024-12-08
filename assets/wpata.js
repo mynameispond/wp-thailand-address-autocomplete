@@ -197,17 +197,20 @@ function wpata_setup($) {
 		}
 	}
 
-
 	if ($(province_selector).length > 0) {
 		$(province_selector).change(function () {
 			const group = wpata_group($, $(this));
-			$(subdistrict_selector.replace('-subdistrict', '-subdistrict.wpata-group-' + group)).html('').prop('disabled', true);
-			$(postalcode_selector.replace('-postalcode', '-postalcode.wpata-group-' + group)).html('').prop('disabled', true);
+			const district_group_selector = district_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+			const subdistrict_group_selector = subdistrict_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+			const postalcode_group_selector = postalcode_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+
+			$(subdistrict_group_selector).html('').prop('disabled', true);
+			$(postalcode_group_selector).html('').prop('disabled', true);
 			let province_value = $(this).val();
 			if (province_value == '') {
-				$(district_selector.replace('-district', '-district.wpata-group-' + group)).html('').prop('disabled', true);
+				$(district_group_selector).html('').prop('disabled', true);
 			} else {
-				$(district_selector.replace('-district', '-district.wpata-group-' + group)).prop('disabled', true).html(loading_option);
+				$(district_group_selector).prop('disabled', true).html(loading_option);
 				$.ajax({
 					url: wpata_admin_url + 'admin-ajax.php',
 					type: 'GET',
@@ -217,7 +220,7 @@ function wpata_setup($) {
 						wpataprov: province_value
 					},
 					success: function (data) {
-						$(district_selector.replace('-district', '-district.wpata-group-' + group)).html(data).prop('disabled', false);
+						$(district_group_selector).html(data).prop('disabled', false);
 					},
 					error: function (errorThrown) { console.error(errorThrown); }
 				});
@@ -226,12 +229,15 @@ function wpata_setup($) {
 
 		$(district_selector).change(function () {
 			const group = wpata_group($, $(this));
-			$(postalcode_selector.replace('-postalcode', '-postalcode.wpata-group-' + group)).html('').prop('disabled', true);
+			const subdistrict_group_selector = subdistrict_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+			const postalcode_group_selector = postalcode_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+			
+			$(postalcode_group_selector).html('').prop('disabled', true);
 			let district_value = $(this).val();
 			if (district_value == '') {
-				$(subdistrict_selector.replace('-subdistrict', '-subdistrict.wpata-group-' + group)).html('').prop('disabled', true);
+				$(subdistrict_group_selector).html('').prop('disabled', true);
 			} else {
-				$(subdistrict_selector.replace('-subdistrict', '-subdistrict.wpata-group-' + group)).prop('disabled', true).html(loading_option);
+				$(subdistrict_group_selector).prop('disabled', true).html(loading_option);
 				$.ajax({
 					url: wpata_admin_url + 'admin-ajax.php',
 					type: 'GET',
@@ -241,7 +247,7 @@ function wpata_setup($) {
 						wpatadist: district_value
 					},
 					success: function (data) {
-						$(subdistrict_selector.replace('-subdistrict', '-subdistrict.wpata-group-' + group)).html(data).prop('disabled', false);
+						$(subdistrict_group_selector).html(data).prop('disabled', false);
 					},
 					error: function (errorThrown) { console.error(errorThrown); }
 				});
@@ -250,11 +256,13 @@ function wpata_setup($) {
 
 		$(subdistrict_selector).change(function () {
 			const group = wpata_group($, $(this));
+			const postalcode_group_selector = postalcode_selector.replace(".wpata-select", '.wpata-group-' + group + '.wpata-select');
+
 			let subdistrict_value = $(this).val();
 			if (subdistrict_value == '') {
-				$(postalcode_selector.replace('-postalcode', '-postalcode.wpata-group-' + group)).html('').prop('disabled', true);
+				$(postalcode_group_selector).html('').prop('disabled', true);
 			} else {
-				$(postalcode_selector.replace('-postalcode', '-postalcode.wpata-group-' + group)).prop('disabled', true).html(loading_option);
+				$(postalcode_group_selector).prop('disabled', true).html(loading_option);
 				$.ajax({
 					url: wpata_admin_url + 'admin-ajax.php',
 					type: 'GET',
@@ -264,7 +272,7 @@ function wpata_setup($) {
 						wpatasubdist: subdistrict_value
 					},
 					success: function (data) {
-						$(postalcode_selector.replace('-postalcode', '-postalcode.wpata-group-' + group)).html(data).prop('disabled', false);
+						$(postalcode_group_selector).html(data).prop('disabled', false);
 					},
 					error: function (errorThrown) { console.error(errorThrown); }
 				});
