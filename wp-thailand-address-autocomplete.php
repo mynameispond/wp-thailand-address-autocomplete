@@ -3,7 +3,7 @@
 Plugin Name: WP Autocomplete Thailand Address
 Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
-Version: 0.1.0
+Version: 0.2.0
 Author: mynameispond
 Author URI: https://github.com/mynameispond
 */
@@ -239,7 +239,7 @@ function wpata_load_postalcode_option()
 	} else {
 		echo '<option value="">' . get_option("wpata_postalcode_{$lang}") . '</option>';
 		foreach ($rs as $data) {
-			echo '<option value="' . $data->ptc_id . '">' . $data->ptc_idx . '</option>';
+			echo '<option value="' . $data->ptc_id . '" ' . (count($rs) == 1 ? 'selected' : '') . '>' . $data->ptc_idx . '</option>';
 		}
 	}
 	die();
