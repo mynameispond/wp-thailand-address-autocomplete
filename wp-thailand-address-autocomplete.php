@@ -3,7 +3,7 @@
 Plugin Name: WP Autocomplete Thailand Address
 Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
-Version: 1.0.4
+Version: 1.0.5
 Author: mynameispond
 Author URI: https://github.com/mynameispond
 Update URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('WPATA_VERSION', '1.0.4');
+define('WPATA_VERSION', '1.0.5');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 define('WPATA_GITHUB_URL', 'https://github.com/mynameispond/wp-thailand-address-autocomplete');
 if (!defined('WPATA_GITHUB_BRANCH')) {
