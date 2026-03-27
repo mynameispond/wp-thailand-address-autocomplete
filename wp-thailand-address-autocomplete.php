@@ -3,7 +3,7 @@
 Plugin Name: WP Autocomplete Thailand Address
 Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
-Version: 1.0.6
+Version: 1.0.7
 Author: mynameispond
 Author URI: https://github.com/mynameispond
 Update URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('WPATA_VERSION', '1.0.6');
+define('WPATA_VERSION', '1.0.7');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 define('WPATA_GITHUB_URL', 'https://github.com/mynameispond/wp-thailand-address-autocomplete');
 if (!defined('WPATA_GITHUB_BRANCH')) {
@@ -153,7 +153,30 @@ function wpata_register_admin_menu()
 		'wpata_render_admin_router_page'
 	);
 }
-add_action('admin_menu', 'wpata_register_admin_menu');
+add_action('admin_menu', 'wpata_register_admin_menu', 99);
+
+function wpata_move_admin_menu_to_bottom()
+{
+	global $submenu;
+
+	if (!isset($submenu['tools.php']) || !is_array($submenu['tools.php'])) {
+		return;
+	}
+
+	foreach ($submenu['tools.php'] as $index => $item) {
+		if (!isset($item[2]) || $item[2] !== 'wpata-admin') {
+			continue;
+		}
+
+		// ย้ายเมนูปลั๊กอินนี้ไปไว้ท้ายสุดของเมนู Tools
+		$target_menu = $item;
+		unset($submenu['tools.php'][$index]);
+		$submenu['tools.php'][] = $target_menu;
+		$submenu['tools.php'] = array_values($submenu['tools.php']);
+		break;
+	}
+}
+add_action('admin_menu', 'wpata_move_admin_menu_to_bottom', 9999);
 
 function wpata_enqueue_admin_assets()
 {
