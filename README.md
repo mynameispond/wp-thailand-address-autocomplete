@@ -274,3 +274,16 @@ define('WPATA_GITHUB_TOKEN', 'ghp_xxx'); // ใส่เมื่อเป็น
 - เวอร์ชันใน tag/release ต้องมากกว่าเวอร์ชันที่ติดตั้งอยู่
 - ถ้าเป็น private repo ต้องกำหนด `WPATA_GITHUB_TOKEN` ให้ WordPress เข้าถึงข้อมูล release ได้
 - ถ้าไม่พบไลบรารี `plugin-update-checker` ระบบจะข้ามการเช็กอัปเดต (ไม่กระทบการทำงานส่วนอื่นของปลั๊กอิน)
+
+### 13.5 แก้ปัญหา Update failed: `PCLZIP_ERR_BAD_FORMAT (-10)`
+อาการนี้แปลว่าไฟล์ที่ WordPress ดาวน์โหลดมาไม่ใช่ ZIP ปลั๊กอินที่ถูกต้อง
+
+ตรวจตามนี้:
+1. ใน GitHub Release ต้องมี asset ที่เป็นไฟล์ `.zip` จริง (ไม่ใช่เปลี่ยนนามสกุลเฉยๆ)
+2. โครงสร้างใน zip ต้องมีโฟลเดอร์ปลั๊กอินที่ root เช่น `wp-thailand-address-autocomplete/...`
+3. ไฟล์หลักต้องอยู่ใน zip ที่ตำแหน่ง `wp-thailand-address-autocomplete/wp-thailand-address-autocomplete.php`
+4. ถ้าใช้ private repo ให้กำหนด `WPATA_GITHUB_TOKEN` ให้ถูกต้อง
+5. หลังแก้ release แล้ว ให้กดเช็กอัปเดตใหม่จาก `Dashboard > Updates`
+
+หมายเหตุ:
+- โค้ดปลั๊กอินจะพยายามเลือกเฉพาะ release asset ที่เป็น `.zip` อัตโนมัติแล้ว

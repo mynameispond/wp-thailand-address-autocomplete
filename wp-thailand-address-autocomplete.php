@@ -3,7 +3,7 @@
 Plugin Name: WP Autocomplete Thailand Address
 Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
-Version: 1.0.5
+Version: 1.0.6
 Author: mynameispond
 Author URI: https://github.com/mynameispond
 Update URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('WPATA_VERSION', '1.0.5');
+define('WPATA_VERSION', '1.0.6');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 define('WPATA_GITHUB_URL', 'https://github.com/mynameispond/wp-thailand-address-autocomplete');
 if (!defined('WPATA_GITHUB_BRANCH')) {
@@ -82,8 +82,10 @@ function wpata_boot_update_checker()
 	if (method_exists($checker, 'getVcsApi')) {
 		$vcs_api = $checker->getVcsApi();
 		if (is_object($vcs_api)) {
+			$zip_asset_pattern = '/\.zip($|[?&#])/i';
 			if (method_exists($vcs_api, 'enableReleaseAssets')) {
-				$vcs_api->enableReleaseAssets();
+				// บังคับเลือกเฉพาะ release asset ที่เป็นไฟล์ .zip เพื่อลดปัญหาอัปเดตแตกไฟล์ไม่ได้
+				$vcs_api->enableReleaseAssets($zip_asset_pattern);
 			} elseif (method_exists($vcs_api, 'setEnableReleaseAssets')) {
 				$vcs_api->setEnableReleaseAssets(true);
 			}
