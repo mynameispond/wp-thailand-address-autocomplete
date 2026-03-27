@@ -228,3 +228,43 @@ $postal_code = wpata_get_postalcode_name_by_id(1);
 หมายเหตุ:
 - ถ้าไม่พบข้อมูล หรือส่ง `id` ไม่ถูกต้อง ฟังก์ชันจะคืนค่าว่าง `''`
 - พารามิเตอร์ `$lang` รองรับ `th` และ `en`
+
+## 13) อัปเดตปลั๊กอินผ่านหน้า Plugins (GitHub Tag/Release)
+ปลั๊กอินนี้รองรับการเช็กอัปเดตจาก GitHub โดยใช้ `YahnisElsts/plugin-update-checker`
+และแสดงปุ่มอัปเดตในหน้า `Plugins` ของ WordPress ได้ทันที
+
+### 13.1 เตรียมไลบรารี `plugin-update-checker`
+วิธีที่แนะนำ (Composer):
+
+```bash
+composer install --no-dev
+```
+
+โดยในโปรเจกต์มี `composer.json` ให้แล้ว และจะโหลดไฟล์จาก `vendor/autoload.php` อัตโนมัติ
+
+ทางเลือก (ไม่ใช้ Composer):
+- คัดลอกโฟลเดอร์ไลบรารีมาไว้ที่:
+  - `plugin-update-checker/plugin-update-checker.php` หรือ
+  - `lib/plugin-update-checker/plugin-update-checker.php`
+
+### 13.2 ตัวแปรเสริมที่ปรับได้
+ตั้งค่าใน `wp-config.php` ได้ (ไม่บังคับ):
+
+```php
+define('WPATA_GITHUB_BRANCH', 'main'); // ค่าเริ่มต้นคือ main
+define('WPATA_GITHUB_TOKEN', 'ghp_xxx'); // ใส่เมื่อเป็น private repo
+```
+
+### 13.3 ขั้นตอนปล่อยเวอร์ชันใหม่ด้วย Tag/Release
+1. แก้เวอร์ชันในไฟล์ปลั๊กอินให้ตรงกันทั้ง 2 จุด:
+`Version:` และ `WPATA_VERSION`
+2. Commit โค้ด แล้วสร้าง tag ใหม่ (เช่น `1.0.3` หรือ `v1.0.3`)
+3. สร้าง GitHub Release จาก tag นั้น
+4. แนบไฟล์ zip ของปลั๊กอินใน Release (ควรมีโฟลเดอร์ `vendor` หรือไลบรารีที่จำเป็นครบ)
+5. ไปที่ WordPress Admin > `Dashboard > Updates` หรือหน้า `Plugins` แล้วเช็กอัปเดต
+6. เมื่อพบเวอร์ชันใหม่ จะกด `Update now` ได้จากหน้า Plugins ทันที
+
+### 13.4 หมายเหตุสำคัญ
+- เวอร์ชันใน tag/release ต้องมากกว่าเวอร์ชันที่ติดตั้งอยู่
+- ถ้าเป็น private repo ต้องกำหนด `WPATA_GITHUB_TOKEN` ให้ WordPress เข้าถึงข้อมูล release ได้
+- ถ้าไม่พบไลบรารี `plugin-update-checker` ระบบจะข้ามการเช็กอัปเดต (ไม่กระทบการทำงานส่วนอื่นของปลั๊กอิน)

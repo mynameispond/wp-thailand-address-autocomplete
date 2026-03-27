@@ -3,18 +3,99 @@
 Plugin Name: WP Autocomplete Thailand Address
 Plugin URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 Description: Autocomplete Address Thailand
-Version: 1.0.0
+Version: 1.0.4
 Author: mynameispond
 Author URI: https://github.com/mynameispond
+Update URI: https://github.com/mynameispond/wp-thailand-address-autocomplete
 */
 
 if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('WPATA_VERSION', '1.0.0');
+define('WPATA_VERSION', '1.0.4');
 define('WPATA_SLUG', 'wp-thailand-address-autocomplete');
 define('WPATA_GITHUB_URL', 'https://github.com/mynameispond/wp-thailand-address-autocomplete');
+if (!defined('WPATA_GITHUB_BRANCH')) {
+	define('WPATA_GITHUB_BRANCH', 'main');
+}
+
+function wpata_boot_update_checker()
+{
+	if (!is_admin()) {
+		return;
+	}
+
+	static $initialized = false;
+	if ($initialized) {
+		return;
+	}
+
+	$plugin_dir = plugin_dir_path(__FILE__);
+	$autoload_candidates = array(
+		$plugin_dir . 'vendor/autoload.php',
+		$plugin_dir . 'plugin-update-checker/plugin-update-checker.php',
+		$plugin_dir . 'lib/plugin-update-checker/plugin-update-checker.php',
+	);
+
+	// โหลดไลบรารีเฉพาะตอนยังไม่พบคลาส เพื่อรองรับทั้งแบบ Composer และแบบวางโฟลเดอร์เอง
+	if (!class_exists('\YahnisElsts\PluginUpdateChecker\v5\PucFactory') && !class_exists('Puc_v4_Factory')) {
+		$loaded = false;
+		foreach ($autoload_candidates as $path) {
+			if (file_exists($path)) {
+				require_once $path;
+				$loaded = true;
+				break;
+			}
+		}
+
+		if (!$loaded) {
+			return;
+		}
+	}
+
+	$checker = null;
+	if (class_exists('\YahnisElsts\PluginUpdateChecker\v5\PucFactory')) {
+		$checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+			WPATA_GITHUB_URL,
+			__FILE__,
+			WPATA_SLUG
+		);
+	} elseif (class_exists('Puc_v4_Factory')) {
+		$checker = Puc_v4_Factory::buildUpdateChecker(
+			WPATA_GITHUB_URL,
+			__FILE__,
+			WPATA_SLUG
+		);
+	}
+
+	if (!$checker) {
+		return;
+	}
+
+	$initialized = true;
+
+	if (method_exists($checker, 'setBranch')) {
+		$checker->setBranch(WPATA_GITHUB_BRANCH);
+	}
+
+	if (method_exists($checker, 'getVcsApi')) {
+		$vcs_api = $checker->getVcsApi();
+		if (is_object($vcs_api)) {
+			if (method_exists($vcs_api, 'enableReleaseAssets')) {
+				$vcs_api->enableReleaseAssets();
+			} elseif (method_exists($vcs_api, 'setEnableReleaseAssets')) {
+				$vcs_api->setEnableReleaseAssets(true);
+			}
+		}
+	}
+
+	$github_token = defined('WPATA_GITHUB_TOKEN') ? trim((string) WPATA_GITHUB_TOKEN) : '';
+	if ($github_token !== '' && method_exists($checker, 'setAuthentication')) {
+		$checker->setAuthentication($github_token);
+	}
+}
+add_action('plugins_loaded', 'wpata_boot_update_checker', 20);
 
 function wpata_meta_tags()
 {
