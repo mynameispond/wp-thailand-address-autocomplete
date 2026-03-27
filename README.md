@@ -207,3 +207,24 @@ window.wpataInit($nodes);
 - หลายชุดในหน้าเดียว
 - ตั้งค่า default value
 - เพิ่มชุดฟอร์มผ่าน AJAX/append (jQuery CDN) แล้วเรียก `wpataInit()` ซ้ำ
+
+## 12) Helper: รับ ID แล้วคืนชื่อ
+ปลั๊กอินมี helper function สำหรับแปลง `id -> ชื่อ` ดังนี้:
+
+- `wpata_get_province_name_by_id($pv_id, $lang = 'th')`
+- `wpata_get_district_name_by_id($dt_id, $lang = 'th')`
+- `wpata_get_subdistrict_name_by_id($sdt_id, $lang = 'th')`
+- `wpata_get_postalcode_name_by_id($ptc_id)`
+
+ตัวอย่าง:
+
+```php
+$province_name_th = wpata_get_province_name_by_id(1, 'th');
+$district_name_en = wpata_get_district_name_by_id(1, 'en');
+$subdistrict_name_th = wpata_get_subdistrict_name_by_id(1, 'th');
+$postal_code = wpata_get_postalcode_name_by_id(1);
+```
+
+หมายเหตุ:
+- ถ้าไม่พบข้อมูล หรือส่ง `id` ไม่ถูกต้อง ฟังก์ชันจะคืนค่าว่าง `''`
+- พารามิเตอร์ `$lang` รองรับ `th` และ `en`

@@ -429,6 +429,84 @@ function wpata_get_postalcode_by_id($ptc_id)
 	return $wpdb->get_row($wpdb->prepare("SELECT ptc_id, ptc_idx, ptc_pv_id, ptc_dt_id, ptc_sdt_id FROM {$table} WHERE ptc_id=%d", $ptc_id));
 }
 
+function wpata_get_province_name_by_id($pv_id, $lang = 'th')
+{
+	$pv_id = absint($pv_id);
+	if ($pv_id <= 0) {
+		return '';
+	}
+
+	$lang = wpata_sanitize_lang($lang);
+	$row = wpata_get_province_by_id($pv_id);
+	if (!$row) {
+		return '';
+	}
+
+	$field = "pv_name_{$lang}";
+	if (!isset($row->$field) || $row->$field === '') {
+		return '';
+	}
+
+	return (string) $row->$field;
+}
+
+function wpata_get_district_name_by_id($dt_id, $lang = 'th')
+{
+	$dt_id = absint($dt_id);
+	if ($dt_id <= 0) {
+		return '';
+	}
+
+	$lang = wpata_sanitize_lang($lang);
+	$row = wpata_get_district_by_id($dt_id);
+	if (!$row) {
+		return '';
+	}
+
+	$field = "dt_name_{$lang}";
+	if (!isset($row->$field) || $row->$field === '') {
+		return '';
+	}
+
+	return (string) $row->$field;
+}
+
+function wpata_get_subdistrict_name_by_id($sdt_id, $lang = 'th')
+{
+	$sdt_id = absint($sdt_id);
+	if ($sdt_id <= 0) {
+		return '';
+	}
+
+	$lang = wpata_sanitize_lang($lang);
+	$row = wpata_get_subdistrict_by_id($sdt_id);
+	if (!$row) {
+		return '';
+	}
+
+	$field = "sdt_name_{$lang}";
+	if (!isset($row->$field) || $row->$field === '') {
+		return '';
+	}
+
+	return (string) $row->$field;
+}
+
+function wpata_get_postalcode_name_by_id($ptc_id)
+{
+	$ptc_id = absint($ptc_id);
+	if ($ptc_id <= 0) {
+		return '';
+	}
+
+	$row = wpata_get_postalcode_by_id($ptc_id);
+	if (!$row || !isset($row->ptc_idx)) {
+		return '';
+	}
+
+	return (string) $row->ptc_idx;
+}
+
 function wpata_data_tabs()
 {
 	return array(
