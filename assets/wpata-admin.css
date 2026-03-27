@@ -1,0 +1,167 @@
+.wpata-admin-wrap {
+	max-width: 1200px;
+}
+
+.wpata-admin-head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.wpata-admin-head h1 {
+	margin-bottom: 6px;
+}
+
+.wpata-admin-subtitle {
+	margin: 0;
+	color: #50575e;
+}
+
+.wpata-card {
+	background: #ffffff;
+	border: 1px solid #dcdcde;
+	border-radius: 10px;
+	padding: 18px;
+	margin-top: 16px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.wpata-card h2 {
+	margin-top: 0;
+}
+
+.wpata-form-table th {
+	width: 280px;
+}
+
+.wpata-inline-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
+.wpata-inline-filter select {
+	min-width: 220px;
+}
+
+.wpata-nav-tab-wrapper {
+	margin-top: 4px;
+}
+
+.wpata-main-nav {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 10px;
+	margin: 2px 0 10px;
+}
+
+.wpata-main-nav-item {
+	display: block;
+	padding: 12px 14px;
+	border: 1px solid #d0d9e2;
+	border-radius: 10px;
+	background: #ffffff;
+	color: #1f2937;
+	text-decoration: none;
+	box-shadow: 0 1px 1px rgba(15, 23, 42, 0.05);
+	transition: all 0.18s ease;
+}
+
+.wpata-main-nav-item:hover {
+	border-color: #9fc4eb;
+	background: #f8fbff;
+	color: #0f172a;
+}
+
+.wpata-main-nav-item:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.wpata-main-nav-item.is-active {
+	border-color: #2271b1;
+	background: linear-gradient(135deg, #eef6ff 0%, #f6fbff 100%);
+	box-shadow: 0 0 0 1px rgba(34, 113, 177, 0.15);
+}
+
+.wpata-main-nav-title {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.wpata-main-nav-desc {
+	display: block;
+	margin-top: 3px;
+	font-size: 12px;
+	line-height: 1.45;
+	color: #475569;
+}
+
+.wpata-settings-table td input.regular-text {
+	width: 100%;
+}
+
+.wpata-card-metrics .wpata-metric-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
+
+.wpata-metric-item {
+	border: 1px solid #e2e4e7;
+	border-radius: 8px;
+	padding: 12px;
+	background: #f9fafb;
+}
+
+.wpata-metric-label {
+	display: block;
+	color: #50575e;
+	margin-bottom: 6px;
+}
+
+.wpata-metric-value {
+	font-size: 24px;
+	line-height: 1.2;
+}
+
+.wpata-row-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.wpata-inline-delete-form {
+	display: inline-block;
+	margin: 0 0 0 6px;
+}
+
+.wpata-admin-guide-link {
+	margin-top: 16px;
+	padding: 14px 16px;
+	border: 1px solid #c7ddff;
+	border-left: 4px solid #2271b1;
+	border-radius: 8px;
+	background: #f0f6fc;
+}
+
+.wpata-admin-guide-link p {
+	margin: 0;
+	color: #334155;
+}
+
+.wpata-admin-guide-link a {
+	font-weight: 600;
+}
+
+@media (max-width: 782px) {
+	.wpata-main-nav {
+		grid-template-columns: 1fr;
+	}
+}
