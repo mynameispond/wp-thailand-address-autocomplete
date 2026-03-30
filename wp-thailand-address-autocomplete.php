@@ -119,6 +119,31 @@ function wpata_request_lang()
 	return wpata_sanitize_lang($lang);
 }
 
+function wpata_require_login_for_public_ajax()
+{
+	$require_login = false;
+
+	if (defined('WPATA_REQUIRE_LOGIN_FOR_PUBLIC_AJAX')) {
+		$require_login = (bool) WPATA_REQUIRE_LOGIN_FOR_PUBLIC_AJAX;
+	} else {
+		$option_value = get_option('wpata_require_login_for_public_ajax', '0');
+		$require_login = $option_value === '1';
+	}
+
+	return (bool) apply_filters('wpata_require_login_for_public_ajax', $require_login);
+}
+
+function wpata_block_public_ajax_if_required()
+{
+	if (!wpata_require_login_for_public_ajax() || is_user_logged_in()) {
+		return false;
+	}
+
+	status_header(403);
+	wp_die(esc_html__('You must be logged in to use this address endpoint.', 'default'));
+	return true;
+}
+
 function wpata_option_label($key, $lang)
 {
 	$defaults = array(
@@ -1141,10 +1166,6 @@ function wpata_handle_data_entity_submit()
 		return;
 	}
 
-	if (!current_user_can('manage_options')) {
-		wp_die(esc_html__('You do not have permission to manage this plugin.', 'default'));
-	}
-
 	$is_save = isset($_POST['wpata_save_data']);
 	$is_delete = isset($_POST['wpata_delete_data']);
 	if (!$is_save && !$is_delete) {
@@ -1155,6 +1176,10 @@ function wpata_handle_data_entity_submit()
 	$view = isset($_REQUEST['wpata_view']) ? sanitize_key(wp_unslash($_REQUEST['wpata_view'])) : '';
 	if ($page !== 'wpata-admin' || $view !== 'data') {
 		return;
+	}
+
+	if (!current_user_can('manage_options')) {
+		wp_die(esc_html__('You do not have permission to manage this plugin.', 'default'));
 	}
 
 	if ($is_save) {
@@ -1995,6 +2020,10 @@ add_action('wp_enqueue_scripts', 'wpata_enqueue_scripts');
 
 function wpata_load_province_option()
 {
+	if (wpata_block_public_ajax_if_required()) {
+		return;
+	}
+
 	$lang = wpata_request_lang();
 	global $wpdb;
 	$name_col = "pv_name_{$lang}";
@@ -2015,6 +2044,10 @@ add_action('wp_ajax_nopriv_wpata_load_province_option', 'wpata_load_province_opt
 
 function wpata_load_district_option()
 {
+	if (wpata_block_public_ajax_if_required()) {
+		return;
+	}
+
 	$lang = wpata_request_lang();
 	$pv_id = isset($_GET['wpataprov']) ? absint(wp_unslash($_GET['wpataprov'])) : 0;
 	global $wpdb;
@@ -2040,6 +2073,10 @@ add_action('wp_ajax_nopriv_wpata_load_district_option', 'wpata_load_district_opt
 
 function wpata_load_subdistrict_option()
 {
+	if (wpata_block_public_ajax_if_required()) {
+		return;
+	}
+
 	$lang = wpata_request_lang();
 	$pv_id = isset($_GET['wpataprov']) ? absint(wp_unslash($_GET['wpataprov'])) : 0;
 	$dt_id = isset($_GET['wpatadist']) ? absint(wp_unslash($_GET['wpatadist'])) : 0;
@@ -2075,6 +2112,10 @@ add_action('wp_ajax_nopriv_wpata_load_subdistrict_option', 'wpata_load_subdistri
 
 function wpata_load_postalcode_option()
 {
+	if (wpata_block_public_ajax_if_required()) {
+		return;
+	}
+
 	$lang = wpata_request_lang();
 	$pv_id = isset($_GET['wpataprov']) ? absint(wp_unslash($_GET['wpataprov'])) : 0;
 	$dt_id = isset($_GET['wpatadist']) ? absint(wp_unslash($_GET['wpatadist'])) : 0;
